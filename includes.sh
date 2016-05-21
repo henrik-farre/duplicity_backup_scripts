@@ -17,8 +17,10 @@ function cleanup() {
   fi
   if [ "${ERROR}" -gt 0 ]; then
     echo -e "${TYPE} failed:\n${ERROR_MSG}\n\n\n${MSG}" | mailx -s "[CRON]: ${TYPE} of ${HOSTNAME} failed!" "${EMAIL}"
+    notify_users_error
   else
     echo -e "${TYPE} completed:${MSG}" | mailx -s "[CRON]: ${TYPE} of ${HOSTNAME} completed" "${EMAIL}"
+    notify_users_done
   fi
   unset PASSPHRASE
   unset GOOGLE_DRIVE_SETTINGS
@@ -59,6 +61,8 @@ function setup() {
   if [[ ! -d /var/log/backup ]]; then
     mkdir /var/log/backup
   fi
+  
+  notify_users_start
 }
 
 function dump_disk_info() {
@@ -98,5 +102,23 @@ function dump_disk_info() {
 function dump_package_list() {
   if [ -f /etc/arch-release ]; then
     pacman -Q | gzip > /var/backup/packages.txt.gz
+  fi
+}
+
+function notify_users_start() {
+  if [ -e /usr/bin/notify-send ]; then
+    /usr/local/sbin/user-notification.sh "emblem-generic" "Duplicity backup" "... Backup is starting"
+  fi
+}
+
+function notify_users_done() {
+  if [ -e /usr/bin/notify-send ]; then
+    /usr/local/sbin/user-notification.sh "emblem-generic" "Duplicity backup" "... Backup completed"
+  fi
+}
+
+function notify_users_error() {
+  if [ -e /usr/bin/notify-send ]; then
+    /usr/local/sbin/user-notification.sh "emblem-urgent" "Duplicity backup" "... Backup failed!"
   fi
 }
