@@ -3,7 +3,7 @@
 set -o nounset
 set -o errexit
 set -o pipefail
-set -o xtrace
+#set -o xtrace
 IFS=$'\n\t'
 
 ICON=${1:-"emblem-generic"}
