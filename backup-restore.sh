@@ -10,6 +10,7 @@ fi
 
 # For PyDrive credentials
 cd /root/.duplicity/
+# shellcheck disable=SC1091
 source /root/.duplicity/conf
 
 if [[ "${#}" -ne 3 ]]; then
