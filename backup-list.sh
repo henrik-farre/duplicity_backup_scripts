@@ -10,11 +10,13 @@ fi
 
 # For PyDrive credentials
 cd /root/.duplicity/
+# shellcheck disable=SC1091
 source /root/.duplicity/conf
 
 if [[ "${#}" -eq 0 ]]; then
   echo "Missing argument:"
-  echo "Remote dir, e.g. etc"
+  echo "1: Remote dir, e.g. etc"
+  echo "2: (Optional) time argument for duplicity"
   exit 1
 fi
 
