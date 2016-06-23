@@ -13,3 +13,8 @@ export REMOTE_DIR=""
 export BACKDIRS=""
 export LOCK_FILE="/tmp/noshutdown-backup-${$}.lock"
 export EMAIL=""
+# Default if net set is to notify about completion and failure by popup and mail
+export NOTIFY_COMPLETE_POPUP=1
+export NOTIFY_COMPLETE_EMAIL=1
+export NOTIFY_FAILURE_POPUP=1
+export NOTIFY_FAILURE_EMAIL=1

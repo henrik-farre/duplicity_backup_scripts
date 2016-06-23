@@ -16,11 +16,19 @@ function cleanup() {
     rm "${ERROR_LOG}"
   fi
   if [ "${ERROR}" -gt 0 ]; then
-    echo -e "${TYPE} failed:\n${ERROR_MSG}\n\n\n${MSG}" | mailx -s "[CRON]: ${TYPE} of ${HOSTNAME} failed!" "${EMAIL}"
-    notify_users_error
+    if [[ ${NOTIFY_FAILURE_EMAIL:-1} -eq 1 ]]; then
+      echo -e "${TYPE} failed:\n${ERROR_MSG}\n\n\n${MSG}" | mailx -s "[CRON]: ${TYPE} of ${HOSTNAME} failed!" "${EMAIL}"
+    fi
+    if [[ ${NOTIFY_FAILURE_POPUP:-1} -eq 1 ]]; then
+      notify_users_error
+    fi
   else
-    echo -e "${TYPE} completed:${MSG}" | mailx -s "[CRON]: ${TYPE} of ${HOSTNAME} completed" "${EMAIL}"
-    notify_users_done
+    if [[ ${NOTIFY_COMPLETE_EMAIL:-1} -eq 1 ]]; then
+      echo -e "${TYPE} completed:${MSG}" | mailx -s "[CRON]: ${TYPE} of ${HOSTNAME} completed" "${EMAIL}"
+    fi
+    if [[ ${NOTIFY_COMPLETE_POPUP:-1} -eq 1 ]]; then
+      notify_users_done
+    fi
   fi
   unset PASSPHRASE
   unset GOOGLE_DRIVE_SETTINGS
@@ -40,11 +48,11 @@ function err_report() {
   local LASTERR
   LASTLINE="${1}"
   LASTERR="${2}"
-  ERROR_MSG=$(<${ERROR_LOG})
+  ERROR_MSG=$(<"${ERROR_LOG}")
   ERROR_MSG="${ERROR_MSG}\nLine ${LASTLINE}: exit status of last command: ${LASTERR}"
   ERROR=1
 
-  exit ${LASTERR}
+  exit "${LASTERR}"
 }
 
 # Setup handlers for errors and exit
