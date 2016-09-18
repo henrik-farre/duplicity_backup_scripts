@@ -26,8 +26,6 @@ source /root/.duplicity/conf
 source /usr/local/sbin/includes.sh
 
 setup
-dump_disk_info
-dump_package_list
 
 for SRC_DIR in ${BACKDIRS}; do
   CLEAN_SRC_DIR=${SRC_DIR//\//-}

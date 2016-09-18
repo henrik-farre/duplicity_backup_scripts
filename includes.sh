@@ -69,7 +69,7 @@ function setup() {
   if [[ ! -d /var/log/backup ]]; then
     mkdir /var/log/backup
   fi
-  
+
   notify_users_start
 }
 
