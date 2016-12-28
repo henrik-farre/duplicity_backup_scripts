@@ -2,7 +2,8 @@
 export PASSPHRASE=""
 export ENCRYPT_KEY=""
 export COMMON_OPTS="--encrypt-key ${ENCRYPT_KEY} --log-file /var/log/duplicity.log --archive-dir /var/cache/duplicity"
-export BACKUP_OPTS="--full-if-older-than 4M --volsize 1024 --asynchronous-upload"
+# Full backup each month, to high volsize will result in out of memory errors
+export BACKUP_OPTS="--full-if-older-than 1M --volsize 256 --asynchronous-upload"
 EXCLUDE_OPTS="--exclude-device-files --exclude-other-filesystems"
 if [[ -f /usr/local/etc/duplicity/exclude-common ]]; then
   EXCLUDE_OPTS="${EXCLUDE_OPTS} --exclude-filelist=/usr/local/etc/duplicity/exclude-common"
@@ -10,6 +11,8 @@ fi
 export GOOGLE_DRIVE_SETTINGS=/root/.duplicity/gdrive
 export EXCLUDE_OPTS
 export REMOTE_DIR=""
+# Keep last 6 full backups (~6M)
+export REMOVE_OPTS="remove-all-but-n-full 6 --force"
 export BACKDIRS=""
 export LOCK_FILE="/tmp/noshutdown-backup-${$}.lock"
 export EMAIL=""
