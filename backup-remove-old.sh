@@ -15,7 +15,7 @@ MSG=""
 ERROR=0
 ERROR_MSG=""
 ERROR_LOG="/tmp/error_log.${$}.txt"
-TYPE="Cleanup"
+TYPE="Remove old"
 
 # Redirect all stderr to error logfile
 exec 2>${ERROR_LOG}
@@ -28,11 +28,11 @@ source /usr/local/sbin/includes.sh
 setup
 
 for SRC_DIR in ${BACKDIRS}; do
-  CLEAN_SRC_DIR="${SRC_DIR//\//-}"
-  DEST_DIR="${REMOTE_DIR}/${CLEAN_SRC_DIR}"
-  LOG_FILE="/var/log/backup/duplicity-cleanup-${CLEAN_SRC_DIR}.log"
+  REMOVE_SRC_DIR="${SRC_DIR//\//-}"
+  DEST_DIR="${REMOTE_DIR}/${REMOVE_SRC_DIR}"
+  LOG_FILE="/var/log/backup/duplicity-remove-old-${REMOVE_SRC_DIR}.log"
 
-  echo  "========================= Cleanup of ${HOSTNAME}/${SRC_DIR} $(date) =========================" >> "${LOG_FILE}"
-  duplicity remove-older-than 1Y ${COMMON_OPTS} --force ${DEST_DIR} >> "${LOG_FILE}"
+  echo  "========================= Removing old backup sets for ${HOSTNAME}/${SRC_DIR} $(date) =========================" >> "${LOG_FILE}"
+  duplicity ${REMOVE_OPTS} ${COMMON_OPTS} ${DEST_DIR} >> "${LOG_FILE}"
   MSG="${MSG}\n- ${SRC_DIR}"
 done
