@@ -13,7 +13,7 @@ cd /root/.duplicity/
 # shellcheck disable=SC1091
 source /root/.duplicity/conf
 
-if [[ "${#}" -ne 3 ]]; then
+if [[ "${#}" -lt 3 ]]; then
   echo "3 arguments are needed:"
   echo "1: File to restore: relative to dir, e.g. hosts"
   echo "2: Remote dir, e.g. etc"
